@@ -26,5 +26,8 @@ loads this directly from the package.
 ## Table 3: Monte Carlo Simulation
 
 No dataset. Simulated data are generated programmatically in `code/analysis.R`
-according to the DGP in the Luo & Spindler (2017) online Appendix.
+by calling the DGP function defined in `code/DGP.R`, taken directly from the
+authors' replication package available at:
+https://www.openicpsr.org/openicpsr/project/113507/version/V1/view
+
 See `data_dictionary.md` for DGP parameters.
