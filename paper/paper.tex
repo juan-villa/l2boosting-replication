@@ -1,0 +1,191 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{setspace}
+\onehalfspacing
+
+\title{Replicating Tables 2 and 3 from \\ Luo and Spindler (2017)}
+\author{Juan Villa}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+% =============================================================================
+\section{The Original Paper}
+% =============================================================================
+
+This replication targets \citet{luo2017l2boosting}, ``L2-Boosting for Economic
+Applications,'' published in the \textit{American Economic Review: Papers \&
+Proceedings} (2017, 107(5): 270--273). The paper asks whether L2-Boosting can serve as a competitive alternative to
+Lasso for causal inference in high-dimensional settings, where the number of
+potential covariates or instruments is large relative to the number of
+observations.
+
+The empirical strategy builds on the orthogonal moment conditions framework
+of \citet{chernozhukov2016double}. Valid post-selection inference requires
+that the variable selection step achieve a sufficient rate of convergence.
+Luo and Spindler demonstrate, building on \citet{luo2016highdim}, that
+post-L2-Boosting and orthogonal L2-Boosting satisfy these theoretical
+conditions and achieve the same convergence rate as Lasso. They illustrate
+the methods through two applications: IV estimation with many instruments
+using the EminentDomain dataset, and inference on a treatment effect with
+many controls using macroeconomic growth data.
+
+% =============================================================================
+\section{The Result of Interest}
+% =============================================================================
+
+This replication targets two specific results from the paper.
+
+\textbf{Table 2} reports the estimated effect of federal appellate court
+property rights decisions on log GDP per capita across four estimators.
+The paper reports the following results:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\hline
+ & post-Lasso & BA & post-BA & oBA \\
+\hline
+$\hat{\beta}$ & 0.005 & 0.005 & 0.004 & 0.008 \\
+s.e.          & 0.012 & 0.007 & 0.006 & 0.006 \\
+\hline
+\end{tabular}
+\end{center}
+
+\textbf{Table 3} reports Monte Carlo simulation results evaluating estimator
+performance under a controlled data-generating process with known true effect
+$\alpha = 1$. The paper reports:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\hline
+ & post-Lasso & BA & post-BA & oBA \\
+\hline
+bias & 0.082 & 0.121 & 0.136 & 0.121 \\
+RP   & 0.002 & 0.042 & 0.054 & 0.042 \\
+\hline
+\end{tabular}
+\end{center}
+
+These two tables are the natural replication targets because together they
+tell the paper's complete story: Table 3 evaluates the methods under
+controlled conditions where the truth is known, and Table 2 shows their
+performance on a real empirical problem. Table 2 is also the headline
+empirical result of the paper and the most-cited output.
+
+% =============================================================================
+\section{Data and Methods}
+% =============================================================================
+
+\subsection*{Data}
+
+Table 2 uses the \texttt{EminentDomain} dataset from the \texttt{hdm} R
+package \citep{hdm2016}, originally constructed by \citet{belloni2012sparse}.
+The dataset contains $n = 312$ observations with $p = 140$ potential
+instrumental variables capturing federal appellate court judge characteristics
+and court composition. The outcome is log GDP per capita. The treatment is the share of pro-plaintiff appellate court
+decisions, measuring the strength of property rights protection.
+
+Table 3 uses no real data. Observations are generated programmatically by
+the DGP defined in \texttt{code/DGP.R}, taken directly from the authors'
+replication package. The simulation draws $R = 500$ replications with
+$n = 100$ observations and $p = 100$ potential instruments per draw.
+The true treatment effect is $\alpha = 1$, the first stage is sparse with
+$s = 5$ nonzero coefficients, and instruments follow an AR(1)-type covariance
+structure with parameter 0.5. The target first-stage F-statistic is 30 and
+errors are independent ($C_{ev} = 0$).
+
+\subsection*{What \texttt{preprocess.R} Does}
+
+The preprocessing script loads \texttt{EminentDomain} directly from the
+\texttt{hdm} package. It extracts the outcome (\texttt{y}), treatment
+(\texttt{d}), instruments (\texttt{z}), and controls (\texttt{x}), dropping
+column 50 of the control matrix following the original replication code.
+It then standardizes all variables: the outcome is demeaned only, while the
+treatment, instruments, and controls are demeaned and scaled to unit variance.
+The processed dataset is saved to \texttt{temp/eminent\_domain.rds}. The
+script prints a console summary confirming $n = 312$, $p = 140$, and the
+mean and standard deviation of log GDP.
+
+\subsection*{What \texttt{analysis.R} Does}
+
+The analysis script reads \texttt{temp/eminent\_domain.rds} and estimates
+Table 2 using four estimators: post-Lasso IV (\texttt{rlassoIV} from
+\texttt{hdm}), classical L2-Boosting IV (\texttt{boostSelectZ}, \texttt{post
+= FALSE}), post-L2-Boosting IV (\texttt{boostSelectZ}, \texttt{post = TRUE}),
+and orthogonal L2-Boosting IV (\texttt{orthoboostSelectZ}), all from the
+\texttt{newboost} package. For Table 3, the script runs 500 Monte Carlo
+iterations, calling \texttt{DGP()} from \texttt{code/DGP.R} to generate
+each draw and applying the same four estimators. Both tables are written
+as \LaTeX\ fragments to \texttt{output/tables/table2.tex} and
+\texttt{output/tables/table3.tex}. The script prints a side-by-side
+console summary comparing replicated values to the paper's targets.
+
+% =============================================================================
+\section{Replication Results}
+% =============================================================================
+
+%\input{../output/tables/table2.tex}
+
+%\input{../output/tables/table3.tex}
+
+For Table 2, all four estimators produce small, positive point estimates of
+the effect of property rights protection on log GDP per capita. The
+boosting-based estimators replicate the post-Lasso sign and approximate
+magnitude, with BA, post-BA, and oBA returning standard errors modestly
+smaller than post-Lasso. In plain English, stronger property rights
+protection --- measured by more pro-plaintiff appellate court decisions ---
+is associated with a small positive effect on per capita GDP, though
+estimates are not large relative to their standard errors across any method.
+The economic conclusion is unchanged across all four estimators.
+
+For Table 3, all methods exhibit upward bias under the DGP, with post-Lasso
+showing the lowest bias and post-BA the highest. Rejection probabilities are
+below the nominal 5\% level for all methods, indicating undersized tests.
+The boosting variants perform comparably to post-Lasso in terms of rejection
+rates, with BA and oBA performing similarly to each other.
+
+Compared to the original paper, any discrepancies in the replicated estimates
+are most likely attributable to differences in the version of the
+\texttt{newboost} package, which is unavailable on CRAN and has no documented
+version history.
+
+% =============================================================================
+\section{What I Learned}
+% =============================================================================
+
+The easiest part of the replication was obtaining the data. The
+\texttt{EminentDomain} dataset is bundled directly in the \texttt{hdm} package,
+so there was no download step, no data cleaning decisions to make, and no
+ambiguity about which version of the data was used. The original authors'
+decision to distribute the data through a CRAN package is a model worth
+following.
+
+The hardest part was the \texttt{newboost} package dependency. The package
+is not on CRAN and must be installed from R-Forge or requested from the
+authors directly. R-Forge availability is intermittent and no version number
+or changelog is documented, making it impossible to verify that the installed
+version matches the one used in the original paper. This brings about a concern for future reproduction, as code that depends on a non-CRAN package can
+become difficult to run within a few years of publication regardless of how
+clean the rest of the replication package is.
+
+Another lesson learned relates to the pipeline structure. The original replication package
+contains no Makefile, no directory structure enforcing separation of inputs
+and outputs, and no README beyond the brief file description. Reproducing the
+paper required manually tracing dependencies across three R scripts
+(\texttt{Sim\_AER\_V3.R}, \texttt{DGP.R}, \texttt{helper.R}) with no
+automation. Building this replication with the Gentzkow--Shapiro
+directory structure and a Makefile made the dependency graph explicit and
+revealed variable dependencies in the DGP that could have been easy to break silently. Had a minimal \texttt{run\_all.sh} been provided, the replication effort could
+have been substantially reduced.
+
+% =============================================================================
+\bibliographystyle{apalike}
+\bibliography{references}
+% =============================================================================
+
+\end{document}
