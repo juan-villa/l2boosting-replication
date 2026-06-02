@@ -1,6 +1,6 @@
 # DGP for IV estimation as as described in the Supplement
 
-DGP <- function() {x
+DGP <- function() {
 
 # parameter setting
 nu <- 0.1
