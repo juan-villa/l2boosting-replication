@@ -1,0 +1,31 @@
+\begin{thebibliography}{}
+
+\bibitem[Belloni et~al., 2012]{belloni2012sparse}
+Belloni, A., Chen, D., Chernozhukov, V., and Hansen, C. (2012).
+\newblock Sparse models and methods for optimal instruments with an application
+  to eminent domain.
+\newblock {\em Econometrica}, 80(6):2369--2429.
+
+\bibitem[Chernozhukov et~al., 2016a]{chernozhukov2016double}
+Chernozhukov, V., Chetverikov, D., Demirer, M., Duflo, E., Hansen, C., and
+  Newey, W. (2016a).
+\newblock Double machine learning for treatment and causal parameters.
+\newblock Centre for Microdata Methods and Practice Working Paper CWP49/16.
+
+\bibitem[Chernozhukov et~al., 2016b]{hdm2016}
+Chernozhukov, V., Hansen, C., and Spindler, M. (2016b).
+\newblock {\em hdm: High-Dimensional Metrics}.
+\newblock R package.
+
+\bibitem[Luo and Spindler, 2016]{luo2016highdim}
+Luo, Y. and Spindler, M. (2016).
+\newblock High-dimensional l2-boosting: Rate of convergence.
+\newblock {\em arXiv preprint arXiv:1602.08927}.
+
+\bibitem[Luo and Spindler, 2017]{luo2017l2boosting}
+Luo, Y. and Spindler, M. (2017).
+\newblock L2-boosting for economic applications.
+\newblock {\em American Economic Review: Papers \& Proceedings},
+  107(5):270--273.
+
+\end{thebibliography}
