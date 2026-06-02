@@ -20,9 +20,7 @@
 
 This replication targets \citet{luo2017l2boosting}, ``L2-Boosting for Economic
 Applications,'' published in the \textit{American Economic Review: Papers \&
-Proceedings} (2017, 107(5): 270--273). The paper asks whether L2-Boosting ---
-a machine learning method prominent in biostatistics and pattern recognition
-but underutilized in economics --- can serve as a competitive alternative to
+Proceedings} (2017, 107(5): 270--273). The paper asks whether L2-Boosting can serve as a competitive alternative to
 Lasso for causal inference in high-dimensional settings, where the number of
 potential covariates or instruments is large relative to the number of
 observations.
@@ -57,9 +55,9 @@ s.e.          & 0.012 & 0.007 & 0.006 & 0.006 \\
 \end{tabular}
 \end{center}
 
-Table 2 is the natural replication target because it is the headline empirical
-result of the paper --- the output that directly answers the research question
-about whether L2-Boosting produces economically sensible estimates in a
+Table 2 is a natural replication target because it is the main empirical
+result of the paper directly answering the research question
+of whether L2-Boosting produces economically sensible estimates in a
 real high-dimensional IV setting. It is also the most self-contained result,
 depending only on the publicly available \texttt{EminentDomain} dataset from
 the \texttt{hdm} package, with no simulation infrastructure required.
@@ -71,8 +69,7 @@ the \texttt{hdm} package, with no simulation infrastructure required.
 \subsection*{Data}
 
 Table 2 uses the \texttt{EminentDomain} dataset from the \texttt{hdm} R
-package \citep{hdm2016}, originally constructed by \citet{belloni2012sparse}
-for their study of property rights and economic outcomes. The dataset contains
+package \citep{hdm2016}, originally constructed by \citet{belloni2012sparse}. The dataset contains
 $n = 312$ observations with $p = 140$ potential instrumental variables
 capturing federal appellate court judge characteristics and court composition.
 The outcome is log GDP per capita (mean $= 11.2297$, s.d.\ $= 0.694$).
@@ -100,29 +97,24 @@ Table 2 using four estimators: post-Lasso IV (\texttt{rlassoIV} from
 \texttt{post = TRUE}), and orthogonal L2-Boosting IV
 (\texttt{orthoboostSelectZ}), the latter three from the \texttt{newboost}
 package. The table is written as a \LaTeX\ fragment to
-\texttt{output/tables/table2.tex}. The script prints a side-by-side console
+\texttt{output/tables/table2.tex}. The script prints a console
 summary comparing replicated values to the paper's targets.
 
 % =============================================================================
 \section{Replication Results}
 % =============================================================================
 
-\input{../output/tables/table2.tex}
+%\input{../output/tables/table2.tex}
 
 All four estimators produce small, positive point estimates of the effect of
-property rights protection on log GDP per capita. The replicated estimates
-are very close to the paper's reported values across all four methods. The
+property rights protection on log GDP per capita. The
 boosting-based estimators (BA, post-BA, oBA) replicate the post-Lasso sign
 and approximate magnitude, with modestly smaller standard errors in some
-specifications. In plain English, stronger property rights protection ---
-measured by more pro-plaintiff appellate court decisions --- is associated
-with a small positive effect on per capita GDP, though estimates are not
-large relative to their standard errors across any method. The economic
-conclusion is unchanged across all four estimators.
+specifications. The economic
+conclusion is unchanged for all four estimators.
 
-Compared to the original paper, the replicated estimates match closely at
-three decimal places. Any minor discrepancies are consistent with numerical
-differences in package versions and are not economically meaningful.
+Compared to the original paper, the replicated estimates across all methods match exactly when rounded to
+three decimal places. 
 
 % =============================================================================
 \section{What I Learned}
@@ -132,18 +124,14 @@ The easiest part of the replication was obtaining the data. The
 \texttt{EminentDomain} dataset is bundled directly in the \texttt{hdm}
 package, requiring no download step, no data cleaning decisions, and no
 ambiguity about which version of the data was used. The original authors'
-decision to distribute the data through a CRAN package is a model worth
-following.
+decision to distribute the data through a CRAN package made data extremely accessible.
 
-The hardest part was the \texttt{newboost} package dependency. The package
+The hardest part was dealing with the \texttt{newboost} package dependency. The package
 is not available on CRAN and must be installed from R-Forge or requested
-from the authors directly. R-Forge availability is intermittent, no version
-number or changelog is documented, and the package contains at least one
-latent bug in the original replication code --- a stray character in the
+directly from the authors. R-Forge availability is intermittent and no version
+number or changelog is documented. I also encountered a bug in the
 \texttt{DGP()} function definition that causes a silent failure unless a
-specific global variable happens to exist in the environment. This kind of
-hidden dependency is invisible until you try to run the code in a clean
-pipeline, which the original replication package provides no support for.
+specific global variable happens to exist in the environment. This issue was self-induced after the accidental addition of a variable in the function when running the code separately, though this emphasizes how useful Makefiles can be in replication.
 
 A broader lesson is the value of pipeline infrastructure. The original
 replication package contains no Makefile, no enforced directory structure,
