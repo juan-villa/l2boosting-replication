@@ -9,3 +9,5 @@ __pycache__/
 *.toc
 .DS_Store
 .Rproj.user
+paper/*.blg
+paper/*.bbl
