@@ -29,7 +29,7 @@ Table 2 uses the `EminentDomain` dataset bundled in the `hdm` R package
 (Chernozhukov, Hansen, and Spindler, 2016). No external download is required —
 `preprocess.R` loads it directly via `data("EminentDomain")`.
 
-See `input/README.md` and `data_dictionary.md` for full details.
+See `input/README.md` and `input/data_dictionary.md` for full details.
 
 ---
 
