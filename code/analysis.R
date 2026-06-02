@@ -80,16 +80,18 @@ t2_latex <- sprintf(
 \\centering
 \\caption{Replication of Table 2: Effect of Federal Appellate Takings Law Decisions
 on Economic Outcomes. From Luo and Spindler (2017, AER P\\&P).}
-\\begin{tabular}{lcccc}
+\\begin{tabular*}{\\textwidth}{@{\\extracolsep{\\fill}}lcccc}
 \\hline
  & post-Lasso & BA & post-BA & oBA \\\\
 \\hline
 $\\hat{\\beta}$ & $%.3f$ & $%.3f$ & $%.3f$ & $%.3f$ \\\\
 se             & $%.3f$ & $%.3f$ & $%.3f$ & $%.3f$ \\\\
 \\hline
-\\multicolumn{5}{l}{\\footnotesize Note: Paper reports $\\hat{\\beta}$ =
-0.005, 0.005, 0.004, 0.008 and se = 0.012, 0.007, 0.006, 0.006.}
-\\end{tabular}
+\\end{tabular*}
+\\begin{minipage}{\\textwidth}
+\\footnotesize Note: Paper reports $\\hat{\\beta}$ = 0.005, 0.005, 0.004, 0.008
+and se = 0.012, 0.007, 0.006, 0.006.
+\\end{minipage}
 \\label{tab:table2}
 \\end{table}',
   t2$beta[1], t2$beta[2], t2$beta[3], t2$beta[4],
