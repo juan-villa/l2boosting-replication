@@ -110,9 +110,9 @@ cat("\n\nRunning Table 3: Monte Carlo simulation (R=500, n=100, p=100)...\n")
 cat("This may take several minutes.\n\n")
 
 R <- 500
-n <- 100
-p <- 100
-s <- 5
+n <<- 100
+p <<- 100
+s <<- 5
 
 Results <- matrix(NA, ncol = 5, nrow = R)
 RP      <- matrix(NA, ncol = 5, nrow = R)
